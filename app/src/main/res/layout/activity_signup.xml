@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edit_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edit_background"
+                android:ems="10"
+                android:hint="이름"
+                android:inputType="text"
+                android:paddingStart="30px"
+                android:paddingTop="11dp"
+                android:paddingEnd="5px"
+                android:paddingBottom="11dp" />
+
+            <EditText
+                android:id="@+id/edit_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edit_background"
+                android:ems="10"
+                android:hint="이메일"
+                android:inputType="textEmailAddress"
+                android:paddingStart="30px"
+                android:paddingTop="11dp"
+                android:paddingEnd="5px"
+                android:paddingBottom="11dp" />
+
+            <EditText
+                android:id="@+id/edit_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edit_background"
+                android:ems="10"
+                android:hint="비밀번호"
+                android:inputType="textPassword"
+                android:paddingStart="30px"
+                android:paddingTop="11dp"
+                android:paddingEnd="5px"
+                android:paddingBottom="11dp" />
+
+            <EditText
+                android:id="@+id/edit_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edit_background"
+                android:ems="10"
+                android:hint="전화번호"
+                android:inputType="phone"
+                android:paddingStart="30px"
+                android:paddingTop="11dp"
+                android:paddingEnd="5px"
+                android:paddingBottom="11dp" />
+
+            <EditText
+                android:id="@+id/edit_addr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edit_background"
+                android:ems="10"
+                android:hint="주소"
+                android:inputType="text"
+                android:paddingStart="30px"
+                android:paddingTop="11dp"
+                android:paddingEnd="5px"
+                android:paddingBottom="11dp" />
+
+            <EditText
+                android:id="@+id/edit_detail_addr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/edit_background"
+                android:ems="10"
+                android:hint="상세주소"
+                android:inputType="text"
+                android:paddingStart="30px"
+                android:paddingTop="11dp"
+                android:paddingEnd="5px"
+                android:paddingBottom="11dp" />
+
+        </LinearLayout>
+
+        <android.widget.Button
+            android:id="@+id/btn_signup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/btn_background"
+            android:text="회원가입"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/go_to_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="50dp"
+            android:gravity="end"
+            android:text="로그인하기" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
