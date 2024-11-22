@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="end"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/mainImage">
+
+        <ImageView
+            android:id="@+id/logout"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="15dp"
+            app:srcCompat="@drawable/logout" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/searchview_background"
+            android:iconifiedByDefault="false"
+            android:queryBackground="@color/transparent"
+            android:queryHint="검색어를 입력하세요" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/toy_image"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:scaleType="centerCrop"
+            android:clipToOutline="true"
+            android:background="@drawable/rounded_corner_border"
+            app:srcCompat="@drawable/toy_image" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical"/>
+
+</LinearLayout>
