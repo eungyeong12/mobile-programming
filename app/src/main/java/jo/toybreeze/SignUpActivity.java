@@ -105,13 +105,17 @@ public class SignUpActivity extends AppCompatActivity {
     private void displayErrorMessage(Exception exception) {
         if (exception.getMessage().contains("The email address is badly formatted")) {
             Toast.makeText(this, "이메일 형식이 올바르지 않습니다.", Toast.LENGTH_SHORT).show();
+            return;
         }
         if (exception.getMessage().contains("Password should be at least 6 characters")) {
             Toast.makeText(this, "비밀번호는 6자 이상으로 설정해주세요.", Toast.LENGTH_SHORT).show();
+            return;
         }
         if (exception.getMessage().contains("The email address is already in use by another account")) {
             Toast.makeText(this, "이미 가입된 계정입니다.", Toast.LENGTH_SHORT).show();
+            return;
         }
+        Toast.makeText(this, "회원가입에 실패였습니다.", Toast.LENGTH_SHORT).show();
     }
 
     private boolean checkValidation(String name, String email, String password, String phoneNumber, String addr, String detailAddr) {
