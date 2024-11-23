@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:scrollbars="none">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="20dp"
+                        android:text="나이"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginEnd="40dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.ramotion.fluidslider.FluidSlider
+                            android:id="@+id/fluidSlider"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:elevation="2dp"
+                            app:bar_color="#ACE1AF"
+                            app:duration="@android:integer/config_mediumAnimTime"
+                            app:initial_position="0.0"
+                            app:size="small" />
+
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="카테고리" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp">
+
+                    <LinearLayout
+                        android:id="@+id/category_layout1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginEnd="40dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/category1"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/category1" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:id="@+id/category2"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/category2" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:id="@+id/category3"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/category3" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/category_layout1_reverse"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginEnd="40dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/category1_reverse"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background2"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="인형"
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/category2_reverse"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background2"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="블록/조립"
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/category3_reverse"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background2"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="롤플레잉"
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
+
+                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginEnd="40dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/category4"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/category4" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:id="@+id/category5"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/category5" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <ImageView
+                            android:id="@+id/category6"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background"
+                            android:padding="10dp"
+                            app:srcCompat="@drawable/category6" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginEnd="40dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/category4_reverse"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background2"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="자동차/로봇"
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/category5_reverse"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background2"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="스포츠/예술"
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/category6_reverse"
+                            android:layout_width="95dp"
+                            android:layout_height="115dp"
+                            android:background="@drawable/category_background2"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="학습/퍼즐"
+                            android:textStyle="bold"
+                            android:visibility="invisible" />
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="25dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="태그" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="30dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/tag_age1"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background_selector"
+                            android:button="@null"
+                            android:text="0~3개월"
+                            android:textAlignment="center" />
+
+                        <CheckBox
+                            android:id="@+id/tag_age2"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background_selector"
+                            android:button="@null"
+                            android:text="3~6개월"
+                            android:textAlignment="center" />
+
+                        <CheckBox
+                            android:id="@+id/tag_age3"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background_selector"
+                            android:button="@null"
+                            android:text="6~12개월"
+                            android:textAlignment="center" />
+
+                        <CheckBox
+                            android:id="@+id/tag_age4"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/tag_background_selector"
+                            android:button="@null"
+                            android:text="1~2세"
+                            android:textAlignment="center" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/tag_merit1"
+                            android:layout_width="90dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background2_selector"
+                            android:button="@null"
+                            android:text="창의력 향상"
+                            android:textAlignment="center" />
+
+                        <CheckBox
+                            android:id="@+id/tag_merit2"
+                            android:layout_width="90dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background2_selector"
+                            android:button="@null"
+                            android:text="감각 발달"
+                            android:textAlignment="center" />
+
+                        <CheckBox
+                            android:id="@+id/tag_merit3"
+                            android:layout_width="90dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/tag_background2_selector"
+                            android:button="@null"
+                            android:text="언어 발달"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/tag_feature1"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background3_selector"
+                            android:button="@null"
+                            android:text="소리나는"
+                            android:textAlignment="center" />
+
+                        <CheckBox
+                            android:id="@+id/tag_feature2"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background3_selector"
+                            android:button="@null"
+                            android:text="움직이는"
+                            android:textAlignment="center" />
+
+                        <CheckBox
+                            android:id="@+id/tag_feature3"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background3_selector"
+                            android:button="@null"
+                            android:text="충전식"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/tag_use1"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background4_selector"
+                            android:button="@null"
+                            android:text="야외용"
+                            android:textAlignment="center" />
+
+                        <CheckBox
+                            android:id="@+id/tag_use2"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background4_selector"
+                            android:button="@null"
+                            android:text="물놀이용"
+                            android:textAlignment="center" />
+
+                        <CheckBox
+                            android:id="@+id/tag_use3"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background4_selector"
+                            android:button="@null"
+                            android:text="캠핑용"
+                            android:textAlignment="center" />
+
+                        <CheckBox
+                            android:id="@+id/tag_use4"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/tag_background4_selector"
+                            android:button="@null"
+                            android:text="눈놀이용"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <android.widget.Button
+                    android:id="@+id/btn_search"
+                    android:layout_width="220dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:background="@drawable/btn_background"
+                    android:text="확인" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

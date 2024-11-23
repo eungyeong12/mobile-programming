@@ -16,7 +16,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager = getSupportFragmentManager();
+    private FragmentCategory fragmentCategory = new FragmentCategory();
     private FragmentHome fragmentHome = new FragmentHome();
+    private ImageView category;
     private ImageView home;
 
     @Override
@@ -33,7 +35,13 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.main_container, fragmentHome).commitAllowingStateLoss();
 
+        category = findViewById(R.id.category);
         home = findViewById(R.id.home);
+
+        category.setOnClickListener(view -> {
+            FragmentTransaction transaction1 = fragmentManager.beginTransaction();
+            transaction1.replace(R.id.main_container, fragmentCategory).commitAllowingStateLoss();
+        });
 
         home.setOnClickListener(view -> {
             FragmentTransaction transaction1 = fragmentManager.beginTransaction();
