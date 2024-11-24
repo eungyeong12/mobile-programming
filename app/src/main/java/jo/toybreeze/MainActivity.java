@@ -1,6 +1,7 @@
 package jo.toybreeze;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import androidx.activity.EdgeToEdge;
@@ -28,8 +29,10 @@ import jxl.read.biff.BiffException;
 public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager = getSupportFragmentManager();
     private FragmentCategory fragmentCategory = new FragmentCategory();
+    private FragmentSubscribe fragmentSubscribe = new FragmentSubscribe();
     private FragmentHome fragmentHome = new FragmentHome();
     private ImageView category;
+    private ImageView subscribe;
     private ImageView home;
     private FirebaseFirestore db;
 
@@ -50,11 +53,17 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.main_container, fragmentHome).commitAllowingStateLoss();
 
         category = findViewById(R.id.category);
+        subscribe = findViewById(R.id.subscribe);
         home = findViewById(R.id.home);
 
         category.setOnClickListener(view -> {
             FragmentTransaction transaction1 = fragmentManager.beginTransaction();
             transaction1.replace(R.id.main_container, fragmentCategory).commitAllowingStateLoss();
+        });
+
+        subscribe.setOnClickListener(view -> {
+            FragmentTransaction transaction1 = fragmentManager.beginTransaction();
+            transaction1.replace(R.id.main_container, fragmentSubscribe).commitAllowingStateLoss();
         });
 
         home.setOnClickListener(view -> {
@@ -63,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void readExcel() {
+    public void readToys() {
         try {
             InputStream is = getBaseContext().getResources().getAssets().open("toy.xls");
             Workbook wb = Workbook.getWorkbook(is);
@@ -102,6 +111,37 @@ public class MainActivity extends AppCompatActivity {
                                     db.collection("companies").document(company).collection("toys").document(documentId).set(toy);
                                     db.collection("images").document(documentId).set(img);
                                 });
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void readCompanies() {
+        try {
+            InputStream is = getBaseContext().getResources().getAssets().open("companies.xls");
+            Workbook wb = Workbook.getWorkbook(is);
+            if(wb != null){
+
+                Sheet sheet = wb.getSheet(0);
+
+                if(sheet != null){
+                    int colTotal = sheet.getColumns();
+                    int rowIndexStart = 0;
+                    int rowTotal = sheet.getColumn(colTotal-1).length;
+
+                    for(int row = rowIndexStart; row < rowTotal; row++) {
+                        String company = sheet.getCell(0, row).getContents();
+                        String image = sheet.getCell(1, row).getContents();
+                        Image img = new Image(image);
+
+                        db.collection("logo")
+                                .document(company)
+                                .set(img);
                     }
                 }
             }
