@@ -17,6 +17,9 @@ public class Toy {
     private String description;
     private String policy;
 
+    public Toy() {
+    }
+
     public Toy(String company, String name, String age, String category, List<String> tags, int monthPrice, int threeMonthPrice, int quantity, int sellQuantity, String description, String policy) {
         this.company = company;
         this.name = name;

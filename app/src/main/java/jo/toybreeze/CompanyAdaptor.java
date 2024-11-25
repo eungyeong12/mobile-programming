@@ -1,6 +1,5 @@
 package jo.toybreeze;
 
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import jo.toybreeze.domain.Company;
 public class CompanyAdaptor extends RecyclerView.Adapter<CompanyAdaptor.ViewHolder> {
     private List<Company> companies;
     private List<Company> allCompanies;
-    private Bitmap bitmap;
 
     public CompanyAdaptor(List<Company> companies) {
         this.companies = companies;
