@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,9 +28,11 @@ public class FragmentHome  extends Fragment {
     private static final String TAG = FragmentHome.class.getSimpleName();
     private ImageView logout;
     private RecyclerView recyclerView1;
+    private RecyclerView recyclerview2;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private BestToyAdaptor bestToyAdaptor;
+    private MainToyAdaptor mainToyAdaptor;
 
     @Nullable
     @Override
@@ -37,6 +40,7 @@ public class FragmentHome  extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         logout = view.findViewById(R.id.logout);
         recyclerView1 = view.findViewById(R.id.recyclerView1);
+        recyclerview2 = view.findViewById(R.id.recyclerView2);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
@@ -55,6 +59,23 @@ public class FragmentHome  extends Fragment {
                         recyclerView1.setLayoutManager(linearLayoutManager);
                         bestToyAdaptor = new BestToyAdaptor(toys, toyIds);
                         recyclerView1.setAdapter(bestToyAdaptor);
+                    }
+                });
+
+        db.collection("toys")
+                .addSnapshotListener((value, error) -> {
+                    List<Toy> toys = new ArrayList<>();
+                    List<String> toyIds = new ArrayList<>();
+
+                    for (QueryDocumentSnapshot document : value) {
+                        Toy toy = document.toObject(Toy.class);
+                        toys.add(toy);
+                        toyIds.add(document.getId());
+                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+                        recyclerview2.setLayoutManager(gridLayoutManager);
+                        recyclerview2.setNestedScrollingEnabled(false);
+                        mainToyAdaptor = new MainToyAdaptor(toys, toyIds);
+                        recyclerview2.setAdapter(mainToyAdaptor);
                     }
                 });
 
