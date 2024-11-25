@@ -1,10 +1,11 @@
 package jo.toybreeze.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Toy {
+public class Toy implements Serializable {
     private String company;
     private String name;
     private String age;

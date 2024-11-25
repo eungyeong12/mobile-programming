@@ -26,9 +26,9 @@
         android:id="@+id/item_best_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="13dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:text="가격"
+        android:textSize="13dp"
         android:textStyle="bold" />
 
     <LinearLayout

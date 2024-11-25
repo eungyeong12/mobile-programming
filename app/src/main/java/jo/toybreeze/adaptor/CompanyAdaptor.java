@@ -1,4 +1,4 @@
-package jo.toybreeze;
+package jo.toybreeze.adaptor;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import jo.toybreeze.R;
 import jo.toybreeze.domain.Company;
 
 public class CompanyAdaptor extends RecyclerView.Adapter<CompanyAdaptor.ViewHolder> {

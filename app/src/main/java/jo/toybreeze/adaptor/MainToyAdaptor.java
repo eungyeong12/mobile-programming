@@ -1,4 +1,4 @@
-package jo.toybreeze;
+package jo.toybreeze.adaptor;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +13,10 @@ import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
 import java.util.List;
 
+import jo.toybreeze.R;
 import jo.toybreeze.domain.Toy;
 
 public class MainToyAdaptor extends RecyclerView.Adapter<MainToyAdaptor.ViewHolder> {
@@ -28,12 +30,33 @@ public class MainToyAdaptor extends RecyclerView.Adapter<MainToyAdaptor.ViewHold
         this.db = FirebaseFirestore.getInstance();
     }
 
+    public interface OnItemClickListener {
+        void onItemClicked(int position, HashMap<String, Toy> data);
+    }
+
+    private OnItemClickListener itemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        itemClickListener = listener;
+    }
+
     @NonNull
     @Override
     public MainToyAdaptor.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_main_toy, parent, false);
         MainToyAdaptor.ViewHolder viewHolder = new MainToyAdaptor.ViewHolder(view);
+
+        view.setOnClickListener(view1 -> {
+            HashMap<String, Toy> data = new HashMap<>();
+            int position = viewHolder.getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                String id = toyIds.get(position);
+                Toy toy = toys.get(position);
+                data.put(id, toy);
+            }
+            itemClickListener.onItemClicked(position, data);
+        });
         return viewHolder;
     }
 

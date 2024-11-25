@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import jo.toybreeze.adaptor.CompanyAdaptor;
 import jo.toybreeze.domain.Company;
 import jo.toybreeze.domain.Image;
 

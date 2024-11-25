@@ -22,6 +22,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import jo.toybreeze.adaptor.BestToyAdaptor;
+import jo.toybreeze.adaptor.MainToyAdaptor;
 import jo.toybreeze.domain.Toy;
 
 public class FragmentHome  extends Fragment {
@@ -58,6 +60,11 @@ public class FragmentHome  extends Fragment {
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
                         recyclerView1.setLayoutManager(linearLayoutManager);
                         bestToyAdaptor = new BestToyAdaptor(toys, toyIds);
+                        bestToyAdaptor.setOnItemClickListener((position, data) -> {
+                            Intent intent = new Intent(getContext(), ToyDetailActivity.class);
+                            intent.putExtra("data", data);
+                            startActivity(intent);
+                        });
                         recyclerView1.setAdapter(bestToyAdaptor);
                     }
                 });
@@ -71,12 +78,17 @@ public class FragmentHome  extends Fragment {
                         Toy toy = document.toObject(Toy.class);
                         toys.add(toy);
                         toyIds.add(document.getId());
-                        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-                        recyclerview2.setLayoutManager(gridLayoutManager);
-                        recyclerview2.setNestedScrollingEnabled(false);
-                        mainToyAdaptor = new MainToyAdaptor(toys, toyIds);
-                        recyclerview2.setAdapter(mainToyAdaptor);
                     }
+                    GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+                    recyclerview2.setLayoutManager(gridLayoutManager);
+                    recyclerview2.setNestedScrollingEnabled(false);
+                    mainToyAdaptor = new MainToyAdaptor(toys, toyIds);
+                    mainToyAdaptor.setOnItemClickListener((position, data) -> {
+                        Intent intent = new Intent(getContext(), ToyDetailActivity.class);
+                        intent.putExtra("data", data);
+                        startActivity(intent);
+                    });
+                    recyclerview2.setAdapter(mainToyAdaptor);
                 });
 
         logout.setOnClickListener(view1 -> {
