@@ -149,8 +149,7 @@ public class ToyDetailActivity extends AppCompatActivity {
 
         plus.setOnClickListener(view -> {
             int current = Integer.parseInt(paymentQuantity.getText().toString());
-            int limit = toy.getQuantity();
-            if (current < limit) {
+            if (current < toyQuantity) {
                 int newQuantity = current + 1;
                 paymentQuantity.setText(String.valueOf(newQuantity));
                 int price = 0;
