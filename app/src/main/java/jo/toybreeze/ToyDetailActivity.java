@@ -2,11 +2,15 @@ package jo.toybreeze;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -35,6 +39,17 @@ public class ToyDetailActivity extends AppCompatActivity {
     private TextView description;
     private TextView policy;
     private FirebaseFirestore db;
+    private Button payment1;
+    private Button payment2;
+    private LinearLayout paymentLayout;
+    private LinearLayout btnLayout;
+    private LinearLayout detailView;
+    private TextView paymentName;
+    private ImageView minus;
+    private TextView paymentQuantity;
+    private TextView paymentPrice;
+    private ImageView plus;
+    private boolean isAMonthPayment = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +71,18 @@ public class ToyDetailActivity extends AppCompatActivity {
         description = findViewById(R.id.detail_description);
         policy = findViewById(R.id.detail_policy);
         db = FirebaseFirestore.getInstance();
+        payment1 = findViewById(R.id.btn_payment1);
+        payment2 = findViewById(R.id.btn_payment2);
+        paymentLayout = findViewById(R.id.payment_layout);
+        btnLayout = findViewById(R.id.btn_layout);
+        detailView = findViewById(R.id.detail_view);
+        paymentName = findViewById(R.id.detail_payment_name);
+        minus = findViewById(R.id.minus);
+        paymentQuantity = findViewById(R.id.detail_payment_quantity);
+        paymentPrice = findViewById(R.id.detail_payment_price);
+        plus = findViewById(R.id.plus);
+
+        paymentLayout.setVisibility(View.GONE);
 
         Intent intent = getIntent();
         HashMap<String, Toy> data = (HashMap<String, Toy>) intent.getSerializableExtra("data");
@@ -102,9 +129,87 @@ public class ToyDetailActivity extends AppCompatActivity {
         three_month_price.setText(String.format("%,d원", toy.getThreeMonthPrice()));
         description.setText(toy.getDescription().toString().replace("\\n", System.lineSeparator()));
         policy.setText(toy.getPolicy().toString().replace("\\n", System.lineSeparator()));
-
         back.setOnClickListener(view -> finish());
-
         home.setOnClickListener(view -> startActivity(new Intent(ToyDetailActivity.this, MainActivity.class)));
+
+        minus.setOnClickListener(view -> {
+            int current = Integer.parseInt(paymentQuantity.getText().toString());
+            if (current > 0) {
+                int newQuantity = current - 1;
+                paymentQuantity.setText(String.valueOf(newQuantity));
+                int price = 0;
+                if (isAMonthPayment) {
+                    price = toy.getMonthPrice();
+                } else {
+                    price = toy.getThreeMonthPrice();
+                }
+                paymentPrice.setText(String.format("%,d", newQuantity * price));
+            }
+        });
+
+        plus.setOnClickListener(view -> {
+            int current = Integer.parseInt(paymentQuantity.getText().toString());
+            int limit = toy.getQuantity();
+            if (current < limit) {
+                int newQuantity = current + 1;
+                paymentQuantity.setText(String.valueOf(newQuantity));
+                int price = 0;
+                if (isAMonthPayment) {
+                    price = toy.getMonthPrice();
+                } else {
+                    price = toy.getThreeMonthPrice();
+                }
+                paymentPrice.setText(String.format("%,d", newQuantity * price));
+            }
+        });
+
+        payment1.setOnClickListener(view -> {
+            isAMonthPayment = true;
+            paymentLayout.setVisibility(View.VISIBLE);
+            btnLayout.setVisibility(View.GONE);
+            paymentName.setText(name.getText().toString());
+            paymentQuantity.setText("0");
+            paymentPrice.setText("0");
+        });
+
+        payment2.setOnClickListener(view -> {
+            isAMonthPayment = false;
+            paymentLayout.setVisibility(View.VISIBLE);
+            btnLayout.setVisibility(View.GONE);
+            paymentQuantity.setText("0");
+            paymentPrice.setText("0");
+        });
+
+        detailView.setOnTouchListener((view, motionEvent) -> {
+            if (!isTouchInsideView(paymentLayout, motionEvent)) {
+                btnLayout.setVisibility(View.VISIBLE);
+                paymentLayout.setVisibility(View.GONE);
+                return true; // 이벤트 소비
+            }
+            return false;
+        });
+
+        this.getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (paymentLayout.getVisibility() == View.VISIBLE) {
+                    btnLayout.setVisibility(View.VISIBLE);
+                    paymentLayout.setVisibility(View.GONE);
+                } else {
+                    finish();
+                }
+            }
+        });
+    }
+
+    private boolean isTouchInsideView(View view, MotionEvent event) {
+        int[] location = new int[2];
+        view.getLocationOnScreen(location);
+
+        float x = event.getRawX();
+        float y = event.getRawY();
+
+        return x >= location[0] && x <= (location[0] + view.getWidth()) &&
+                y >= location[1] && y <= (location[1] + view.getHeight());
     }
 }

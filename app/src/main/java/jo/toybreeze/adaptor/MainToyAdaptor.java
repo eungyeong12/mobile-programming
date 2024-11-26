@@ -80,6 +80,12 @@ public class MainToyAdaptor extends RecyclerView.Adapter<MainToyAdaptor.ViewHold
         holder.price.setText(String.format("%,d원", toy.getMonthPrice()));
         holder.age.setText(toy.getAge() + "세");
         holder.category.setText(toy.getCategory());
+        List<String> tags = toy.getTags();
+        StringBuilder sb = new StringBuilder();
+        for (String tag : tags) {
+            sb.append("#").append(tag).append("   ");
+        }
+        holder.tag.setText(sb);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -89,6 +95,7 @@ public class MainToyAdaptor extends RecyclerView.Adapter<MainToyAdaptor.ViewHold
         private TextView price;
         private TextView age;
         private TextView category;
+        private TextView tag;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -98,6 +105,7 @@ public class MainToyAdaptor extends RecyclerView.Adapter<MainToyAdaptor.ViewHold
             price = itemView.findViewById(R.id.item_main_toy_price);
             age = itemView.findViewById(R.id.item_main_toy_age);
             category = itemView.findViewById(R.id.item_main_toy_category);
+            tag = itemView.findViewById(R.id.item_main_tag);
         }
     }
 

@@ -49,7 +49,7 @@ public class BestToyAdaptor extends RecyclerView.Adapter<BestToyAdaptor.ViewHold
 
         view.setOnClickListener(view1 -> {
             HashMap<String, Toy> data = new HashMap<>();
-            int position = viewHolder.getAdapterPosition();
+            int position = viewHolder.getBindingAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 String id = toyIds.get(position);
                 Toy toy = toys.get(position);
