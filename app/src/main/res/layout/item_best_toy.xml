@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/item_best_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="105dp"
+        android:layout_height="105dp"
         android:scaleType="centerCrop" />
 
     <TextView
@@ -49,7 +49,7 @@
             android:paddingEnd="7dp"
             android:text="나이"
             android:textColor="#707070"
-            android:textSize="8sp" />
+            android:textSize="9sp" />
 
         <TextView
             android:id="@+id/item_best_category"
@@ -63,6 +63,6 @@
             android:paddingEnd="7dp"
             android:text="카테고리"
             android:textColor="#707070"
-            android:textSize="8sp" />
+            android:textSize="9sp" />
     </LinearLayout>
 </LinearLayout>
