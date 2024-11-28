@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,9 +12,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.ramotion.fluidslider.FluidSlider;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jo.toybreeze.domain.Query;
 import kotlin.Unit;
 
 public class FragmentCategory extends Fragment {
@@ -52,6 +58,8 @@ public class FragmentCategory extends Fragment {
     private CheckBox tag_use2;
     private CheckBox tag_use3;
     private CheckBox tag_use4;
+
+    private Button submit;
 
     @Nullable
     @Override
@@ -92,6 +100,8 @@ public class FragmentCategory extends Fragment {
         tag_use2 = view.findViewById(R.id.tag_use2);
         tag_use3 = view.findViewById(R.id.tag_use3);
         tag_use4 = view.findViewById(R.id.tag_use4);
+
+        submit = view.findViewById(R.id.submit);
 
         category1.setOnClickListener(view1 -> {
             category1.setVisibility(View.INVISIBLE);
@@ -166,7 +176,98 @@ public class FragmentCategory extends Fragment {
         });
 
         setSlider();
+
+        submit.setOnClickListener(view113 -> {
+            Bundle bundle = new Bundle();
+            Query query = getQuery();
+            bundle.putSerializable("query", query);
+            FragmentToyList toyList = new FragmentToyList();
+            toyList.setArguments(bundle);
+
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.main_container, toyList);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        });
+
         return view;
+    }
+
+    private Query getQuery() {
+        int age = (int) (0 + 9 * slider.getPosition());
+        List<String> category = getCategory();
+        List<String> tags = getTags();
+        return new Query(String.valueOf(age), category, tags);
+    }
+
+    private List<String> getCategory() {
+        List<String> category = new ArrayList<>();
+        if (checkCategory1) {
+            category.add(category1_text.getText().toString());
+        }
+        if (checkCategory2) {
+            category.add(category2_text.getText().toString());
+        }
+        if (checkCategory3) {
+            category.add(category3_text.getText().toString());
+        }
+        if (checkCategory4) {
+            category.add(category4_text.getText().toString());
+        }
+        if (checkCategory5) {
+            category.add(category5_text.getText().toString());
+        }
+        if (checkCategory6) {
+            category.add(category6_text.getText().toString());
+        }
+        return category;
+    }
+
+    private List<String> getTags() {
+        List<String> tags = new ArrayList<>();
+        if (tag_age1.isChecked()) {
+            tags.add(tag_age1.getText().toString());
+        }
+        if (tag_age2.isChecked()) {
+            tags.add(tag_age2.getText().toString());
+        }
+        if (tag_age3.isChecked()) {
+            tags.add(tag_age3.getText().toString());
+        }
+        if (tag_age4.isChecked()) {
+            tags.add(tag_age4.getText().toString());
+        }
+        if (tag_merit1.isChecked()) {
+            tags.add(tag_merit1.getText().toString());
+        }
+        if (tag_merit2.isChecked()) {
+            tags.add(tag_merit2.getText().toString());
+        }
+        if (tag_merit3.isChecked()) {
+            tags.add(tag_merit3.getText().toString());
+        }
+        if (tag_feature1.isChecked()) {
+            tags.add(tag_feature1.getText().toString());
+        }
+        if (tag_feature2.isChecked()) {
+            tags.add(tag_feature2.getText().toString());
+        }
+        if (tag_feature3.isChecked()) {
+            tags.add(tag_feature3.getText().toString());
+        }
+        if (tag_use1.isChecked()) {
+            tags.add(tag_use1.getText().toString());
+        }
+        if (tag_use2.isChecked()) {
+            tags.add(tag_use2.getText().toString());
+        }
+        if (tag_use3.isChecked()) {
+            tags.add(tag_use3.getText().toString());
+        }
+        if (tag_use4.isChecked()) {
+            tags.add(tag_use4.getText().toString());
+        }
+        return tags;
     }
 
     private void setSlider() {

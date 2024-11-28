@@ -6,17 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import jo.toybreeze.adaptor.BestToyAdaptor;
 import jo.toybreeze.adaptor.MainToyAdaptor;
+import jo.toybreeze.domain.Query;
 import jo.toybreeze.domain.Toy;
 
 public class FragmentHome  extends Fragment {
@@ -35,6 +37,7 @@ public class FragmentHome  extends Fragment {
     private FirebaseFirestore db;
     private BestToyAdaptor bestToyAdaptor;
     private MainToyAdaptor mainToyAdaptor;
+    private SearchView searchView;
 
     @Nullable
     @Override
@@ -45,9 +48,10 @@ public class FragmentHome  extends Fragment {
         recyclerview2 = view.findViewById(R.id.recyclerView2);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+        searchView = view.findViewById(R.id.searchView);
 
         db.collection("toys")
-            .orderBy("sellQuantity", Query.Direction.DESCENDING)
+            .orderBy("sellQuantity", com.google.firebase.firestore.Query.Direction.DESCENDING)
                 .addSnapshotListener((value, error) -> {
                     List<Toy> toys = new ArrayList<>();
                     List<String> toyIds = new ArrayList<>();
@@ -95,6 +99,29 @@ public class FragmentHome  extends Fragment {
             mAuth.signOut();
             startActivity(new Intent(getContext(), LoginActivity.class));
         });
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                Bundle bundle = new Bundle();
+                Query query = new Query(s);
+                bundle.putSerializable("query", query);
+                FragmentToyList toyList = new FragmentToyList();
+                toyList.setArguments(bundle);
+
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.main_container, toyList);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
         return view;
     }
 }
