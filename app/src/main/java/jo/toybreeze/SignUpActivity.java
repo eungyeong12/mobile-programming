@@ -91,7 +91,7 @@ public class SignUpActivity extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(user.getEmail(), user.getPassword())
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        db.collection("users").add(user);
+                        db.collection("users").document(user.getEmail()).set(user);
                         Toast.makeText(this, "회원가입에 성공하였습니다.", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                     } else {

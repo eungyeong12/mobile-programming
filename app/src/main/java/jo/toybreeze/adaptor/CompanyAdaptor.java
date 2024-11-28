@@ -25,12 +25,32 @@ public class CompanyAdaptor extends RecyclerView.Adapter<CompanyAdaptor.ViewHold
         this.allCompanies = new ArrayList<>(companies);
     }
 
+    public interface OnItemClickListener {
+        void onItemClicked(int position, String company);
+    }
+
+    private CompanyAdaptor.OnItemClickListener itemClickListener;
+
+    public void setOnItemClickListener(CompanyAdaptor.OnItemClickListener listener) {
+        itemClickListener = listener;
+    }
+
     @NonNull
     @Override
     public CompanyAdaptor.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_company, parent, false);
         CompanyAdaptor.ViewHolder viewHolder = new CompanyAdaptor.ViewHolder(view);
+
+        view.setOnClickListener(view1 -> {
+            int position = viewHolder.getBindingAdapterPosition();
+            String name = "";
+            if (position != RecyclerView.NO_POSITION) {
+                Company company = companies.get(position);
+                name = company.getName();
+            }
+            itemClickListener.onItemClicked(position, name);
+        });
         return viewHolder;
     }
 

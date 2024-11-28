@@ -1,5 +1,6 @@
 package jo.toybreeze;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +51,11 @@ public class FragmentSubscribe extends Fragment {
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
                     recyclerView.setLayoutManager(linearLayoutManager);
                     companyAdaptor = new CompanyAdaptor(companies);
+                    companyAdaptor.setOnItemClickListener((position, data) -> {
+                        Intent intent = new Intent(getContext(), CompanyToyActivity.class);
+                        intent.putExtra("company", data);
+                        startActivity(intent);
+                    });
                     recyclerView.setAdapter(companyAdaptor);
                 });
 
