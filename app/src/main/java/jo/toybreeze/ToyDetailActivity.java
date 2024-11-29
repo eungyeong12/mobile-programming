@@ -1,6 +1,7 @@
 package jo.toybreeze;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.List;
 
+import jo.toybreeze.domain.PaymentToy;
 import jo.toybreeze.domain.Toy;
 
 public class ToyDetailActivity extends AppCompatActivity {
@@ -50,6 +52,9 @@ public class ToyDetailActivity extends AppCompatActivity {
     private TextView paymentPrice;
     private ImageView plus;
     private boolean isAMonthPayment = true;
+    private Button payment;
+    private String imageUrl = "";
+    private LinearLayout companyLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +86,8 @@ public class ToyDetailActivity extends AppCompatActivity {
         paymentQuantity = findViewById(R.id.detail_payment_quantity);
         paymentPrice = findViewById(R.id.detail_payment_price);
         plus = findViewById(R.id.plus);
+        payment = findViewById(R.id.btn_payment);
+        companyLayout = findViewById(R.id.company_layout);
 
         paymentLayout.setVisibility(View.GONE);
 
@@ -105,9 +112,9 @@ public class ToyDetailActivity extends AppCompatActivity {
         DocumentReference docRef2 = db.collection("images").document(id);
         docRef2.get().addOnCompleteListener(imageTask -> {
             if (imageTask.isSuccessful() && imageTask.getResult() != null) {
-                String url = imageTask.getResult().getString("url");
+                imageUrl = imageTask.getResult().getString("url");
                 Glide.with(image.getContext())
-                        .load(url)
+                        .load(imageUrl)
                         .thumbnail()
                         .into(image);
             }
@@ -198,6 +205,12 @@ public class ToyDetailActivity extends AppCompatActivity {
                     finish();
                 }
             }
+        });
+
+        companyLayout.setOnClickListener(view -> {
+            Intent intent1 = new Intent(getApplicationContext(), CompanyToyActivity.class);
+            intent1.putExtra("company", company.getText().toString());
+            startActivity(intent1);
         });
     }
 
