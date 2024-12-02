@@ -44,6 +44,13 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 app:srcCompat="@drawable/home" />
+
+            <ImageView
+                android:id="@+id/cart"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="15dp"
+                app:srcCompat="@drawable/cart" />
         </LinearLayout>
 
     </LinearLayout>
@@ -383,7 +390,7 @@
             android:orientation="horizontal">
 
             <android.widget.Button
-                android:id="@+id/btn_basket"
+                android:id="@+id/btn_cart"
                 android:layout_width="150dp"
                 android:layout_height="35dp"
                 android:layout_marginEnd="6dp"

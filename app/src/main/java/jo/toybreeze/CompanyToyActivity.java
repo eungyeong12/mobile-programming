@@ -11,17 +11,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import jo.toybreeze.adaptor.CompanyToyAdaptor;
 import jo.toybreeze.domain.Toy;
 
 public class CompanyToyActivity extends AppCompatActivity {
     private static final String TAG = CompanyToyActivity.class.getSimpleName();
+    private de.hdodenhof.circleimageview.CircleImageView logo;
     private TextView companyName;
     private RecyclerView recyclerView;
     private CompanyToyAdaptor companyToyAdaptor;
@@ -34,6 +38,7 @@ public class CompanyToyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_company_toy);
+        logo = findViewById(R.id.subscribe_company_logo);
         companyName = findViewById(R.id.subscribe_company);
         recyclerView = findViewById(R.id.company_toy_view);
         back = findViewById(R.id.back);
@@ -43,6 +48,18 @@ public class CompanyToyActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String company = intent.getStringExtra("company");
         companyName.setText(company);
+
+        DocumentReference docRef = db.collection("logo").document(company);
+        docRef.get().addOnCompleteListener(imageTask -> {
+            if (imageTask.isSuccessful() && imageTask.getResult() != null) {
+                String url = imageTask.getResult().getString("url");
+                Glide.with(logo.getContext())
+                        .load(url)
+                        .dontAnimate()
+                        .thumbnail()
+                        .into(logo);
+            }
+        });
 
         db.collection("companies")
                 .document(company)

@@ -1,5 +1,6 @@
 package jo.toybreeze;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView category;
     private ImageView subscribe;
     private ImageView home;
+    private ImageView cart;
     private FirebaseFirestore db;
 
     @Override
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         category = findViewById(R.id.category);
         subscribe = findViewById(R.id.subscribe);
         home = findViewById(R.id.home);
+        cart = findViewById(R.id.cart);
 
         category.setOnClickListener(view -> {
             FragmentTransaction transaction1 = fragmentManager.beginTransaction();
@@ -69,6 +72,13 @@ public class MainActivity extends AppCompatActivity {
         home.setOnClickListener(view -> {
             FragmentTransaction transaction1 = fragmentManager.beginTransaction();
             transaction1.replace(R.id.main_container, fragmentHome).commitAllowingStateLoss();
+        });
+
+        cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), CartActivity.class));
+            }
         });
     }
 
