@@ -73,6 +73,7 @@
             android:id="@+id/cart"
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/cart" />
 
         <Space

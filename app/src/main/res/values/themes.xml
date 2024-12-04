@@ -6,5 +6,10 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">#A6A5A5</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
     <style name="Theme.ToyBreeze" parent="Base.Theme.ToyBreeze" />
 </resources>

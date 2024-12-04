@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="mint">#a9dec1</color>
     <color name="transparent">#00FFFFFF</color>
+    <color name="colorAccent">#EEEEEE</color>
+    <color name="colorPrimary">#FADA7A</color>
 </resources>

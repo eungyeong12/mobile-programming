@@ -30,7 +30,7 @@ import jo.toybreeze.domain.Toy;
 
 public class FragmentHome  extends Fragment {
     private static final String TAG = FragmentHome.class.getSimpleName();
-    private ImageView logout;
+    private ImageView cart;
     private RecyclerView recyclerView1;
     private RecyclerView recyclerview2;
     private FirebaseAuth mAuth;
@@ -43,7 +43,7 @@ public class FragmentHome  extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        logout = view.findViewById(R.id.logout);
+        cart = view.findViewById(R.id.cart);
         recyclerView1 = view.findViewById(R.id.recyclerView1);
         recyclerview2 = view.findViewById(R.id.recyclerView2);
         mAuth = FirebaseAuth.getInstance();
@@ -95,9 +95,8 @@ public class FragmentHome  extends Fragment {
                     recyclerview2.setAdapter(mainToyAdaptor);
                 });
 
-        logout.setOnClickListener(view1 -> {
-            mAuth.signOut();
-            startActivity(new Intent(getContext(), LoginActivity.class));
+        cart.setOnClickListener(view1 -> {
+            startActivity(new Intent(getContext(), CartActivity.class));
         });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

@@ -1,7 +1,10 @@
 package jo.toybreeze;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -12,18 +15,27 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.Timestamp;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import jo.toybreeze.adaptor.MainToyAdaptor;
+import jo.toybreeze.adaptor.ReviewAdaptor;
 import jo.toybreeze.domain.PaymentToy;
+import jo.toybreeze.domain.PaymentType;
+import jo.toybreeze.domain.Review;
 import jo.toybreeze.domain.Toy;
 
 public class ToyDetailActivity extends AppCompatActivity {
@@ -60,6 +72,9 @@ public class ToyDetailActivity extends AppCompatActivity {
     private Button addCart;
     private FirebaseAuth mAuth;
     private ImageView cart;
+    private RecyclerView review;
+    private TextView reviewCount;
+    private ReviewAdaptor reviewAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +111,8 @@ public class ToyDetailActivity extends AppCompatActivity {
         addCart = findViewById(R.id.btn_cart);
         mAuth = FirebaseAuth.getInstance();
         cart = findViewById(R.id.cart);
-
+        review = findViewById(R.id.toy_detail_review);
+        reviewCount = findViewById(R.id.toy_detail_review_count);
         paymentLayout.setVisibility(View.GONE);
 
         Intent intent = getIntent();
@@ -221,28 +237,67 @@ public class ToyDetailActivity extends AppCompatActivity {
             startActivity(intent1);
         });
 
+        db.collection("reviews")
+                .whereEqualTo("toy", id)
+                .addSnapshotListener((value, error) -> {
+                    List<Review> reviews = new ArrayList<>();
+
+                    for (QueryDocumentSnapshot document : value) {
+                        Review r = document.toObject(Review.class);
+                        reviews.add(r);
+                    }
+
+                    reviewCount.setText(String.format("%,d", reviews.size()));
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                    review.setLayoutManager(linearLayoutManager);
+                    reviewAdaptor = new ReviewAdaptor(reviews);
+                    review.setAdapter(reviewAdaptor);
+                });
+
         addCart.setOnClickListener(view -> {
             if (paymentQuantity.getText().toString().equals("0")) {
                 return;
             }
             int price = 0;
+            String type = "";
             if (isAMonthPayment) {
                 price = toy.getMonthPrice();
+                type = String.valueOf(PaymentType.MONTH);
             } else {
                 price = toy.getThreeMonthPrice();
+                type = String.valueOf(PaymentType.THREE_MONTH);
             }
             PaymentToy paymentToy = new PaymentToy(
                     imageUrl,
                     name.getText().toString(),
-                    Integer.parseInt(paymentQuantity.getText().toString()),
+                    Integer.parseInt(paymentQuantity.getText().toString().replace("개", "")),
                     toyQuantity,
                     price,
+                    type,
                     new Date()
             );
             db.collection("cart").document(id).set(paymentToy);
+            Snackbar snackbar = Snackbar.make(view, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_LONG)
+                    .setAction("바로가기", v -> {
+                        startActivity(new Intent(ToyDetailActivity.this, CartActivity.class));
+                    })
+                    .setBackgroundTint(Color.parseColor("#A1D6B2"))
+                    .setTextColor(Color.WHITE)
+                    .setActionTextColor(Color.WHITE);
+
+            TextView actionTextView = snackbar.getView().findViewById(com.google.android.material.R.id.snackbar_action);
+            if (actionTextView != null) {
+                SpannableString content = new SpannableString("바로가기");
+                content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+                actionTextView.setText(content);
+            }
+
+            snackbar.show();
         });
 
         cart.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), CartActivity.class)));
+
+        payment.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), PaymentActivity.class)));
     }
 
     private boolean isTouchInsideView(View view, MotionEvent event) {

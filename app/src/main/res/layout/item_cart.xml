@@ -49,7 +49,7 @@
                         android:id="@+id/item_cart_image"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
-                        app:srcCompat="@drawable/category1" />
+                        android:scaleType="centerCrop" />
 
                     <TextView
                         android:id="@+id/item_cart_name"
@@ -69,6 +69,7 @@
                             android:id="@+id/item_cart_cancel"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
                             app:srcCompat="@drawable/cancel" />
                     </LinearLayout>
                 </LinearLayout>
