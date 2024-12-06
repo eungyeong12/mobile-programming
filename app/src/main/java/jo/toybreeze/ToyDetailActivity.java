@@ -15,28 +15,33 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import jo.toybreeze.adaptor.MainToyAdaptor;
 import jo.toybreeze.adaptor.ReviewAdaptor;
+import jo.toybreeze.domain.Payment;
 import jo.toybreeze.domain.PaymentToy;
 import jo.toybreeze.domain.PaymentType;
 import jo.toybreeze.domain.Review;
 import jo.toybreeze.domain.Toy;
+import jo.toybreeze.domain.User;
 
 public class ToyDetailActivity extends AppCompatActivity {
     private static final String TAG = ToyDetailActivity.class.getSimpleName();
@@ -75,6 +80,7 @@ public class ToyDetailActivity extends AppCompatActivity {
     private RecyclerView review;
     private TextView reviewCount;
     private ReviewAdaptor reviewAdaptor;
+    private int cartQuantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,16 +273,28 @@ public class ToyDetailActivity extends AppCompatActivity {
                 price = toy.getThreeMonthPrice();
                 type = String.valueOf(PaymentType.THREE_MONTH);
             }
+
+            cartQuantity = Integer.parseInt(paymentQuantity.getText().toString().replace("개", ""));
+            DocumentReference docRef3 = db.collection("cart").document();
+            docRef3.get().addOnSuccessListener(documentSnapshot -> {
+                PaymentToy existedToy = documentSnapshot.toObject(PaymentToy.class);
+                if (existedToy != null) {
+                    cartQuantity += existedToy.getQuantity();
+                }
+            });
+
             PaymentToy paymentToy = new PaymentToy(
                     imageUrl,
                     name.getText().toString(),
-                    Integer.parseInt(paymentQuantity.getText().toString().replace("개", "")),
+                    cartQuantity,
                     toyQuantity,
                     price,
                     type,
                     new Date()
             );
-            db.collection("cart").document(id).set(paymentToy);
+
+            db.collection("cart").document(id + "_" + type).set(paymentToy);
+
             Snackbar snackbar = Snackbar.make(view, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_LONG)
                     .setAction("바로가기", v -> {
                         startActivity(new Intent(ToyDetailActivity.this, CartActivity.class));
@@ -297,7 +315,51 @@ public class ToyDetailActivity extends AppCompatActivity {
 
         cart.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), CartActivity.class)));
 
-        payment.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), PaymentActivity.class)));
+        payment.setOnClickListener(view -> {
+            if (paymentQuantity.getText().toString().equals("0")) {
+                return;
+            }
+            int price = 0;
+            String type = "";
+            if (isAMonthPayment) {
+                price = toy.getMonthPrice();
+                type = String.valueOf(PaymentType.MONTH);
+            } else {
+                price = toy.getThreeMonthPrice();
+                type = String.valueOf(PaymentType.THREE_MONTH);
+            }
+            PaymentToy paymentToy = new PaymentToy(
+                    imageUrl,
+                    name.getText().toString(),
+                    Integer.parseInt(paymentQuantity.getText().toString().replace("개", "")),
+                    toyQuantity,
+                    price,
+                    type,
+                    new Date()
+            );
+
+            Date now = new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(now);
+            calendar.add(Calendar.DATE, 3);
+            Date startDate = calendar.getTime();
+
+            if (isAMonthPayment) {
+                calendar.add(Calendar.MONTH, 1);
+            } else {
+                calendar.add(Calendar.MONTH, 3);
+            }
+
+            Date endDate = calendar.getTime();
+
+            Payment payment = new Payment(startDate, paymentToy, id, endDate, now);
+            List<Payment> payments = new ArrayList<>();
+            payments.add(payment);
+
+            Intent intent2 = new Intent(getApplicationContext(), PaymentActivity.class);
+            intent2.putExtra("data", (Serializable) payments);
+            startActivity(intent2);
+        });
     }
 
     private boolean isTouchInsideView(View view, MotionEvent event) {

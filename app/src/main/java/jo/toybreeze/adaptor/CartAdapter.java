@@ -3,22 +3,25 @@ package jo.toybreeze.adaptor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.SimpleFormatter;
 
 import jo.toybreeze.R;
 import jo.toybreeze.domain.PaymentToy;
@@ -71,16 +74,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PaymentToy toy = toys.get(position);
         String id = toyIds.get(position);
-        DocumentReference docRef = db.collection("images").document(id);
-        docRef.get().addOnCompleteListener(imageTask -> {
-            if (imageTask.isSuccessful() && imageTask.getResult() != null) {
-                String url = imageTask.getResult().getString("url");
-                Glide.with(holder.image.getContext())
-                        .load(url)
-                        .thumbnail()
-                        .into(holder.image);
-            }
-        });
+
+        Glide.with(holder.image.getContext())
+                .load(toy.getImage())
+                .thumbnail()
+                .into(holder.image);
 
         holder.name.setText(toy.getName());
         holder.quantity.setText(String.valueOf(toy.getQuantity()));
@@ -114,6 +112,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 holder.price.setText(String.format("%,d", newQuantity * toy.getPrice()));
             }
         });
+
+        String paymentType = "";
+        if (toy.getPaymentType().equals("MONTH")) {
+            paymentType = "한 달 대여";
+        } else {
+            paymentType = "세 달 대여";
+        }
+
+        holder.type.setText(paymentType);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -124,6 +131,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         private ImageView plus;
         private TextView quantity;
         private TextView price;
+        private TextView type;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -134,6 +142,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             plus = itemView.findViewById(R.id.plus);
             quantity = itemView.findViewById(R.id.item_cart_quantity);
             price = itemView.findViewById(R.id.item_cart_price);
+            type = itemView.findViewById(R.id.item_cart_type);
         }
     }
 
@@ -141,4 +150,36 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public int getItemCount() {
         return toys.size();
     }
+
+    public List<Map<String, Integer>> getCheckedItems(RecyclerView recyclerView) {
+        List<Map<String, Integer>> checkedItems = new ArrayList<>();
+
+        for (int i = 0; i < recyclerView.getChildCount(); i++) {
+            View child = recyclerView.getChildAt(i);
+            CheckBox checkBox = child.findViewById(R.id.item_cart_check);
+
+            if (checkBox != null && checkBox.isChecked()) {
+                int position = recyclerView.getChildAdapterPosition(child);
+
+                TextView quantityView = child.findViewById(R.id.item_cart_quantity);
+                TextView priceView = child.findViewById(R.id.item_cart_price);
+
+                if (quantityView != null && priceView != null) {
+                    int quantity = Integer.parseInt(quantityView.getText().toString());
+
+                    Map<String, Integer> itemData = new HashMap<>();
+                    itemData.put("position", position);
+                    itemData.put("quantity", quantity);
+                    checkedItems.add(itemData);
+                }
+            }
+        }
+
+        return checkedItems;
+    }
+
+    public PaymentToy getToy(int position) {
+        return toys.get(position);
+    }
+
 }

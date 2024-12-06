@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import jo.toybreeze.R;
+import jo.toybreeze.domain.PaymentToy;
 import jo.toybreeze.domain.Toy;
 
 public class CompanyToyAdaptor extends RecyclerView.Adapter<CompanyToyAdaptor.ViewHolder> {
@@ -106,4 +107,5 @@ public class CompanyToyAdaptor extends RecyclerView.Adapter<CompanyToyAdaptor.Vi
     public int getItemCount() {
         return toys.size();
     }
+
 }
