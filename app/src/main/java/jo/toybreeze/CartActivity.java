@@ -38,6 +38,7 @@ public class CartActivity extends AppCompatActivity {
     private Button goToPayment;
     private List<PaymentToy> toys;
     private List<String> toyIds;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,14 +76,17 @@ public class CartActivity extends AppCompatActivity {
 
         goToPayment.setOnClickListener(view -> {
             List<Payment> payments = new ArrayList<>();
+            boolean isAvailable = false;
 
             List<Map<String, Integer>> checkedItems = cartAdapter.getCheckedItems(recyclerView);
             for (Map<String, Integer> checkedItem : checkedItems) {
                 int position = checkedItem.get("position");
                 int quantity = checkedItem.get("quantity");
                 PaymentToy toy = cartAdapter.getToy(position);
+                isAvailable = true;
 
                 if (quantity == 0) {
+                    isAvailable = false;
                     return;
                 }
 
@@ -105,9 +109,11 @@ public class CartActivity extends AppCompatActivity {
                 payments.add(payment);
             }
 
-            Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
-            intent.putExtra("data", (Serializable) payments);
-            startActivity(intent);
+            if (isAvailable) {
+                Intent intent = new Intent(getApplicationContext(), PaymentActivity.class);
+                intent.putExtra("data", (Serializable) payments);
+                startActivity(intent);
+            }
         });
     }
 }

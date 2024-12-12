@@ -3,11 +3,16 @@ package jo.toybreeze;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,6 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jo.toybreeze.adaptor.CartAdapter;
+import jo.toybreeze.adaptor.PaymentAdaptor;
 import jo.toybreeze.domain.Payment;
 import jo.toybreeze.domain.PaymentToy;
 import jo.toybreeze.domain.User;
@@ -36,23 +43,57 @@ public class PaymentActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private User bootUser;
     private double price;
+    private TextView name;
+    private TextView phone;
+    private TextView addr;
+    private TextView detailAddr;
+    private RecyclerView recyclerView;
+    private PaymentAdaptor paymentAdaptor;
+    private ImageView back;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        EdgeToEdge.enable(this);
         payment = findViewById(R.id.btn_payment);
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        name = findViewById(R.id.payment_user_name);
+        phone = findViewById(R.id.payment_user_phone);
+        addr = findViewById(R.id.payment_user_addr);
+        detailAddr = findViewById(R.id.payment_user_detail_addr);
+        recyclerView = findViewById(R.id.payment_toy_view);
+        back = findViewById(R.id.back);
 
         payment.setClickable(false);
         DocumentReference docRef = db.collection("users").document(currentUser.getEmail());
-        docRef.get().addOnSuccessListener(documentSnapshot -> bootUser = documentSnapshot.toObject(User.class));
+        docRef.get().addOnSuccessListener(documentSnapshot -> {
+            bootUser = documentSnapshot.toObject(User.class);
+            name.setText(bootUser.getName());
+            phone.setText(formatPhoneNumber(bootUser.getPhoneNumber()));
+            addr.setText(bootUser.getAddress());
+            detailAddr.setText(bootUser.getDetailAddress());
+        });
+
+
         Intent intent = getIntent();
         List<Payment> data = (List<Payment>) intent.getSerializableExtra("data");
         List<BootItem> items = new ArrayList<>();
         price = 0.0;
+        int sum = 0;
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        paymentAdaptor = new PaymentAdaptor(data);
+        paymentAdaptor.setOnItemClickListener((position, d) -> {
+            Intent intent2 = new Intent(getApplicationContext(), ToyDetailActivity.class);
+            intent2.putExtra("data", d);
+            startActivity(intent2);
+        });
+        recyclerView.setAdapter(paymentAdaptor);
+
         for (Payment payment : data) {
             PaymentToy paymentToy = payment.getPaymentToy();
             double itemPrice = paymentToy.getQuantity() * (double) paymentToy.getPrice();
@@ -62,8 +103,11 @@ public class PaymentActivity extends AppCompatActivity {
                     .setQty(paymentToy.getQuantity())
                     .setPrice((double) paymentToy.getPrice());
             price += itemPrice;
+            sum += itemPrice;
             items.add(bootItem);
         }
+
+        payment.setText(String.format("%,d원 결제하기", sum));
 
         payment.setClickable(true);
 
@@ -88,12 +132,6 @@ public class PaymentActivity extends AppCompatActivity {
                     .setExtra(extra)
                     .setItems(items);
 
-            Map<String, Object> map = new HashMap<>();
-            map.put("1", "abcdef");
-            map.put("2", "abcdef55");
-            map.put("3", 1234);
-            payload.setMetadata(map);
-//        payload.setMetadata(new Gson().toJson(map));
 
             Bootpay.init(getSupportFragmentManager())
                     .setPayload(payload)
@@ -132,5 +170,11 @@ public class PaymentActivity extends AppCompatActivity {
                         }
                     }).requestPayment();
         });
+
+        back.setOnClickListener(view -> finish());
+    }
+
+    private String formatPhoneNumber(String phoneNumber) {
+        return phoneNumber.replaceAll("(\\d{3})(\\d{4})(\\d{4})", "$1-$2-$3");
     }
 }
