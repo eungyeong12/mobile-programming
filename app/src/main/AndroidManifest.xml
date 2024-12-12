@@ -51,5 +51,8 @@
         <activity android:name=".PaymentActivity"
             android:exported="true">
         </activity>
+        <activity android:name=".SubscribeActivity"
+            android:exported="true">
+        </activity>
     </application>
 </manifest>
