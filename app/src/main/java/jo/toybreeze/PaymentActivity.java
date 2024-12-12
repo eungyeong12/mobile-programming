@@ -28,6 +28,7 @@ import jo.toybreeze.adaptor.CartAdapter;
 import jo.toybreeze.adaptor.PaymentAdaptor;
 import jo.toybreeze.domain.Payment;
 import jo.toybreeze.domain.PaymentToy;
+import jo.toybreeze.domain.PaymentType;
 import jo.toybreeze.domain.User;
 import kr.co.bootpay.android.Bootpay;
 import kr.co.bootpay.android.events.BootpayEventListener;
@@ -165,13 +166,31 @@ public class PaymentActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void onDone(String data) {
-                            Log.d("done", data);
+                        public void onDone(String d) {
+                            Log.d("done", d);
+                            for (Payment payment : data) {
+                                PaymentToy paymentToy = payment.getPaymentToy();
+                                String id = payment.getToyId();
+                                String type = paymentToy.getPaymentType().equals("MONTH") ? String.valueOf(PaymentType.MONTH) : String.valueOf(PaymentType.THREE_MONTH);
+                                db.collection("cart").document(id)
+                                        .delete()
+                                        .addOnSuccessListener(aVoid -> {
+                                            data.remove(payment);
+                                            paymentAdaptor.notifyDataSetChanged();
+                                            if (data.isEmpty()) {
+                                                finish();
+                                            }
+                                        })
+                                        .addOnFailureListener(e -> Log.e("Firestore", "Error deleting document: " + id + "_" + type, e));
+                            }
+                            startActivity(new Intent(getApplicationContext(), CartActivity.class));
                         }
                     }).requestPayment();
         });
 
-        back.setOnClickListener(view -> finish());
+        back.setOnClickListener(view -> {
+            startActivity(new Intent(getApplicationContext(), CartActivity.class));
+        });
     }
 
     private String formatPhoneNumber(String phoneNumber) {
