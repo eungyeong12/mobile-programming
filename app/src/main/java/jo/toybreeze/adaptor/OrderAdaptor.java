@@ -1,9 +1,11 @@
 package jo.toybreeze.adaptor;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import jo.toybreeze.R;
+import jo.toybreeze.ReviewActivity;
 import jo.toybreeze.domain.Order;
 import jo.toybreeze.domain.Toy;
 
@@ -78,6 +81,24 @@ public class OrderAdaptor extends RecyclerView.Adapter<OrderAdaptor.ViewHolder> 
         holder.name.setText(order.getName());
         holder.price.setText(String.format("%,d원", order.getPrice()));
         holder.date.setText("대여 기간: " + dateFormat.format(order.getStartDate()) + " ~ " + dateFormat.format(order.getEndDate()));
+
+        holder.layout.setOnClickListener(view -> {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(view.getContext());
+            builder.setMessage("리뷰를 작성하시겠습니까?")
+                    .setPositiveButton("예", (dialog, which) -> {
+                        // 리뷰 작성 액티비티 또는 프래그먼트로 이동
+                        Intent intent = new Intent(view.getContext(), ReviewActivity.class);
+                        intent.putExtra("orderId", order.getToyId());
+                        view.getContext().startActivity(intent);
+                    })
+                    .setNegativeButton("아니오", (dialog, which) -> {
+                        // 아무 작업도 하지 않음
+                        dialog.dismiss();
+                    });
+
+            android.app.AlertDialog dialog = builder.create();
+            dialog.show();
+        });
     }
 
     @Override
@@ -91,6 +112,7 @@ public class OrderAdaptor extends RecyclerView.Adapter<OrderAdaptor.ViewHolder> 
         private TextView name;
         private TextView price;
         private TextView date;
+        private LinearLayout layout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -99,6 +121,7 @@ public class OrderAdaptor extends RecyclerView.Adapter<OrderAdaptor.ViewHolder> 
             price = itemView.findViewById(R.id.item_order_price);
             purchaseDate = itemView.findViewById(R.id.item_order_purchase_date);
             date = itemView.findViewById(R.id.item_order_date);
+            layout = itemView.findViewById(R.id.layout);
         }
     }
 }

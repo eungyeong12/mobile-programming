@@ -41,15 +41,23 @@ public class FragmentSubscribe extends Fragment {
 
         db.collection("logo")
                 .addSnapshotListener((value, error) -> {
-                    List<Company> companies = new ArrayList<>();
+                    if (error != null || value == null) {
+                        // 에러 처리
+                        return;
+                    }
 
+                    List<Company> companies = new ArrayList<>();
                     for (QueryDocumentSnapshot document : value) {
-                        Company company = new Company(document.getId(), new Image(document.getData().get("url").toString()));
+                        Company company = new Company(
+                                document.getId(),
+                                new Image(document.getString("url"))
+                        );
                         companies.add(company);
                     }
 
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
                     recyclerView.setLayoutManager(linearLayoutManager);
+
                     companyAdaptor = new CompanyAdaptor(companies);
                     companyAdaptor.setOnItemClickListener((position, data) -> {
                         Intent intent = new Intent(getContext(), CompanyToyActivity.class);
@@ -67,7 +75,9 @@ public class FragmentSubscribe extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                companyAdaptor.filter(newText);
+                if (companyAdaptor != null) {
+                    companyAdaptor.filter(newText);
+                }
                 return false;
             }
         });
