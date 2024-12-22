@@ -16,4 +16,4 @@ public class Company {
     public Image getLogo() {
         return logo;
     }
-}
+ }

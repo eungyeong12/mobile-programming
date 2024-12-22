@@ -20,12 +20,15 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import jo.toybreeze.adaptor.CartAdapter;
+import jo.toybreeze.adaptor.OrderAdaptor;
 import jo.toybreeze.adaptor.PaymentAdaptor;
+import jo.toybreeze.domain.Order;
 import jo.toybreeze.domain.Payment;
 import jo.toybreeze.domain.PaymentToy;
 import jo.toybreeze.domain.PaymentType;
@@ -172,6 +175,28 @@ public class PaymentActivity extends AppCompatActivity {
                                 PaymentToy paymentToy = payment.getPaymentToy();
                                 String id = payment.getToyId();
                                 String type = paymentToy.getPaymentType().equals("MONTH") ? String.valueOf(PaymentType.MONTH) : String.valueOf(PaymentType.THREE_MONTH);
+
+                                // Order 객체 생성
+                                Order order = new Order(payment.getStartDate(),
+                                        payment.getEndDate(),
+                                        id,
+                                        paymentToy.getImage(),
+                                        paymentToy.getName(),
+                                        paymentToy.getPrice(),
+                                        new Date());
+
+                                // Firestore에 저장
+                                db.collection("orders")
+                                        .document(user.getEmail())
+                                        .collection("order")
+                                        .add(order)
+                                        .addOnSuccessListener(documentReference -> {
+                                            Log.d(TAG, "Order successfully added with ID: " + documentReference.getId());
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Log.e(TAG, "Error adding order", e);
+                                        });
+
                                 db.collection("cart").document(id)
                                         .delete()
                                         .addOnSuccessListener(aVoid -> {
@@ -182,8 +207,9 @@ public class PaymentActivity extends AppCompatActivity {
                                             }
                                         })
                                         .addOnFailureListener(e -> Log.e("Firestore", "Error deleting document: " + id + "_" + type, e));
+
                             }
-                            startActivity(new Intent(getApplicationContext(), CartActivity.class));
+                            startActivity(new Intent(getApplicationContext(), OrderActivity.class));
                         }
                     }).requestPayment();
         });

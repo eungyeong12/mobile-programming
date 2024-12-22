@@ -38,6 +38,7 @@ public class FragmentHome  extends Fragment {
     private BestToyAdaptor bestToyAdaptor;
     private MainToyAdaptor mainToyAdaptor;
     private SearchView searchView;
+    private ImageView logout;
 
     @Nullable
     @Override
@@ -49,6 +50,7 @@ public class FragmentHome  extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         searchView = view.findViewById(R.id.searchView);
+        logout = view.findViewById(R.id.logout);
 
         db.collection("toys")
             .orderBy("sellQuantity", com.google.firebase.firestore.Query.Direction.DESCENDING)
@@ -119,6 +121,11 @@ public class FragmentHome  extends Fragment {
             public boolean onQueryTextChange(String s) {
                 return false;
             }
+        });
+
+        logout.setOnClickListener(view12 -> {
+            mAuth.signOut();
+            startActivity(new Intent(getContext(), LoginActivity.class));
         });
 
         return view;

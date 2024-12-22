@@ -3,11 +3,13 @@ package jo.toybreeze;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -57,6 +59,19 @@ public class SubscribeActivity extends AppCompatActivity {
                 .setName("Random Subscription")
                 .setPrice(30000.0)
                 .setQty(1));
+
+        randomSubscribe.setOnTouchListener((view, motionEvent) -> {
+            switch (motionEvent.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    randomSubscribe.setBackground(ContextCompat.getDrawable(this, R.drawable.subscribe_background_clicked));
+                    break;
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    randomSubscribe.setBackground(ContextCompat.getDrawable(this, R.drawable.subscribe_background));
+                    break;
+            }
+            return false; // OnClickListener로 이벤트 전달
+        });
 
         randomSubscribe.setOnClickListener(view -> {
             BootUser user = new BootUser()
@@ -114,6 +129,7 @@ public class SubscribeActivity extends AppCompatActivity {
                         @Override
                         public void onDone(String d) {
                             Log.d("done", d);
+                            finish();
                         }
                     }).requestPayment();
         });

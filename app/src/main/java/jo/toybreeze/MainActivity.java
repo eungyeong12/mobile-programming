@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView subscribe;
     private ImageView home;
     private ImageView cart;
+    private ImageView order;
     private FirebaseFirestore db;
 
     @Override
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         subscribe = findViewById(R.id.subscribe);
         home = findViewById(R.id.home);
         cart = findViewById(R.id.cart);
+        order = findViewById(R.id.order);
 
         category.setOnClickListener(view -> {
             FragmentTransaction transaction1 = fragmentManager.beginTransaction();
@@ -74,12 +76,9 @@ public class MainActivity extends AppCompatActivity {
             transaction1.replace(R.id.main_container, fragmentHome).commitAllowingStateLoss();
         });
 
-        cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), CartActivity.class));
-            }
-        });
+        cart.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), CartActivity.class)));
+
+        order.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), OrderActivity.class)));
     }
 
     public void readToys() {
