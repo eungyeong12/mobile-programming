@@ -51,8 +51,6 @@ public class ReviewAdaptor extends RecyclerView.Adapter<ReviewAdaptor.ViewHolder
         holder.content.setText(review.getContent());
 
         db.collection("review_images")
-                .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                .collection("toy")
                 .document(review.getToy())
                 .collection(review.getReviewId())
                 .addSnapshotListener((value, error) -> {

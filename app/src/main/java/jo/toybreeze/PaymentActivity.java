@@ -202,14 +202,20 @@ public class PaymentActivity extends AppCompatActivity {
                                         .addOnSuccessListener(documentSnapshot -> {
                                             if (documentSnapshot.exists()) {
                                                 Long currentQuantity = documentSnapshot.getLong("quantity");
+                                                Long currentSellQuantity = documentSnapshot.getLong("sellQuantity");
+
                                                 if (currentQuantity != null && currentQuantity > 0) {
+                                                    Map<String, Object> updates = new HashMap<>();
+                                                    updates.put("quantity", currentQuantity - 1); // quantity 감소
+                                                    updates.put("sellQuantity", (currentSellQuantity != null ? currentSellQuantity : 0) + 1);
+
                                                     db.collection("toys").document(id)
-                                                            .update("quantity", currentQuantity - 1)
+                                                            .update(updates)
                                                             .addOnSuccessListener(aVoid -> {
-                                                                Log.d(TAG, "Toy quantity updated successfully for ID: " + id);
+                                                                Log.d(TAG, "Toy quantity and sellQuantity updated successfully for ID: " + id);
                                                             })
                                                             .addOnFailureListener(e -> {
-                                                                Log.e(TAG, "Error updating toy quantity", e);
+                                                                Log.e(TAG, "Error updating toy quantity and sellQuantity", e);
                                                             });
                                                 }
                                             }
@@ -217,6 +223,7 @@ public class PaymentActivity extends AppCompatActivity {
                                         .addOnFailureListener(e -> {
                                             Log.e(TAG, "Error fetching toy data for ID: " + id, e);
                                         });
+
 
                                 db.collection("cart").document(id)
                                         .delete()

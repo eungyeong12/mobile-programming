@@ -293,7 +293,7 @@ public class ToyDetailActivity extends AppCompatActivity {
                     new Date()
             );
 
-            db.collection("cart").document(id + "_" + type).set(paymentToy);
+            db.collection("cart").document(id).set(paymentToy);
 
             Snackbar snackbar = Snackbar.make(view, "장바구니에 상품을 담았습니다.", Snackbar.LENGTH_LONG)
                     .setAction("바로가기", v -> {

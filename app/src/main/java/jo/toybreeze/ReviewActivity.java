@@ -148,8 +148,6 @@ public class ReviewActivity extends AppCompatActivity {
                     Log.d(TAG, "Review added with ID: " + documentReference.getId());
                     for (String url : imageUris) {
                         db.collection("review_images")
-                                .document(FirebaseAuth.getInstance().getCurrentUser().getEmail())
-                                .collection("toy")
                                 .document(toyId)
                                 .collection(review.getReviewId())
                                 .document()
